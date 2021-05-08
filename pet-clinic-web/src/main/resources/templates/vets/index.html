@@ -5,6 +5,19 @@
     <title>List of Vets</title>
 </head>
 <body>
+<!--/*@thymesVar id="vet" type="aldora.springframework.springpetclinic.model.Vet"*/-->
 <h1 th:text="'list of vets'">Index Page</h1>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>FirstName</th>
+        <th>LastName</th>
+    </tr>
+    <tr th:each="vet : ${vets}">
+        <td th:text="${vet.id}">id</td>
+        <td th:text="${vet.firstName}">firstname</td>
+        <td th:text="${vet.lastName}">lastname</td>
+    </tr>
+</table>
 </body>
 </html>
