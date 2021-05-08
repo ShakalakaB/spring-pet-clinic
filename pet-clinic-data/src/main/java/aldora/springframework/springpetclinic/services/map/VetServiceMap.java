@@ -1,11 +1,11 @@
 package aldora.springframework.springpetclinic.services.map;
 
 import aldora.springframework.springpetclinic.model.Vet;
-import aldora.springframework.springpetclinic.services.CrudService;
+import aldora.springframework.springpetclinic.services.VetService;
 
 import java.util.Set;
 
-public class VetServiceMap extends AbstractMapService<Vet, Long> implements CrudService<Vet, Long> {
+public class VetServiceMap extends AbstractMapService<Vet, Long> implements VetService {
     @Override
     public Set<Vet> findAll() {
         return super.findAll();
