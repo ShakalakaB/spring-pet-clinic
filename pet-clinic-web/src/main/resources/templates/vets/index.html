@@ -1,23 +1,27 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'vets')}">
 <head>
     <meta charset="UTF-8">
     <title>List of Vets</title>
 </head>
 <body>
 <!--/*@thymesVar id="vet" type="aldora.springframework.springpetclinic.model.Vet"*/-->
-<h1 th:text="'list of vets'">Index Page</h1>
-<table>
+<h1 th:text="'List of vets'">Index Page</h1>
+<table class="table table-striped">
+    <thead>
     <tr>
         <th>ID</th>
         <th>FirstName</th>
         <th>LastName</th>
     </tr>
+    </thead>
+    <tbody>
     <tr th:each="vet : ${vets}">
         <td th:text="${vet.id}">id</td>
         <td th:text="${vet.firstName}">firstname</td>
         <td th:text="${vet.lastName}">lastname</td>
     </tr>
+    </tbody>
 </table>
 </body>
 </html>
