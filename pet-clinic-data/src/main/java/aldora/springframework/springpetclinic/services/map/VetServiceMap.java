@@ -1,6 +1,8 @@
 package aldora.springframework.springpetclinic.services.map;
 
+import aldora.springframework.springpetclinic.model.Speciality;
 import aldora.springframework.springpetclinic.model.Vet;
+import aldora.springframework.springpetclinic.services.SpecialityService;
 import aldora.springframework.springpetclinic.services.VetService;
 import org.springframework.stereotype.Service;
 
@@ -8,6 +10,11 @@ import java.util.Set;
 
 @Service
 public class VetServiceMap extends AbstractMapService<Vet, Long> implements VetService {
+    private final SpecialityService specialityService;
+
+    public VetServiceMap(SpecialityService specialityService) {
+        this.specialityService = specialityService;
+    }
     @Override
     public Set<Vet> findAll() {
         return super.findAll();
@@ -20,6 +27,25 @@ public class VetServiceMap extends AbstractMapService<Vet, Long> implements VetS
 
     @Override
     public Vet save(Vet object) {
+        if (object == null) {
+            throw new RuntimeException("Object cannot be null");
+        }
+
+        if (object.getSpecialities() == null) {
+            return super.save(object);
+        }
+
+        object.getSpecialities().forEach(speciality -> {
+            if (speciality == null) {
+                throw new RuntimeException("Pet type is required");
+            }
+
+            if (speciality.getId() == null) {
+                Speciality savedSpeciality = specialityService.save(speciality);
+                speciality.setId(savedSpeciality.getId());
+            }
+        });
+
         return super.save(object);
     }
 
