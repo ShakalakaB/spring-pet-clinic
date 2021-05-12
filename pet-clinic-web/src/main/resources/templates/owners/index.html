@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'owners')}">
 <head>
     <meta charset="UTF-8">
     <title>List of Owners</title>
@@ -7,17 +7,21 @@
 <body>
 <!--/*@thymesVar id="owner" type="aldora.springframework.springpetclinic.model.Owner"*/-->
 <h1 th:text="'list of owners'">Index Page</h1>
-<table>
+<table class="table table-striped">
+    <thead>
     <tr>
-        <th>ID</th>
-        <th>FirstName</th>
-        <th>LastName</th>
+        <th style="width: 150px;">ID</th>
+        <th style="width: 150px;">FirstName</th>
+        <th style="width: 150px;">LastName</th>
     </tr>
+    </thead>
+    <tbody>
     <tr th:each="owner : ${owners}">
         <td th:text="${owner.id}">id</td>
         <td th:text="${owner.firstName}">firstname</td>
         <td th:text="${owner.lastName}">lastname</td>
     </tr>
+    </tbody>
 </table>
 </body>
 </html>
