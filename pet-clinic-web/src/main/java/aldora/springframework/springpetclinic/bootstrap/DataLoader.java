@@ -1,10 +1,7 @@
 package aldora.springframework.springpetclinic.bootstrap;
 
 import aldora.springframework.springpetclinic.model.*;
-import aldora.springframework.springpetclinic.services.OwnerService;
-import aldora.springframework.springpetclinic.services.PetTypeService;
-import aldora.springframework.springpetclinic.services.SpecialityService;
-import aldora.springframework.springpetclinic.services.VetService;
+import aldora.springframework.springpetclinic.services.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -16,13 +13,16 @@ public class DataLoader implements CommandLineRunner {
     private final VetService vetService;
     private final PetTypeService petTypeService;
     private final SpecialityService specialityService;
+    private final VisitService visitService;
 
     public DataLoader(OwnerService ownerService, VetService vetService, PetTypeService petTypeService,
-                      SpecialityService specialityService) {
+                      SpecialityService specialityService,
+                      VisitService visitService) {
         this.ownerService = ownerService;
         this.vetService = vetService;
         this.petTypeService = petTypeService;
         this.specialityService = specialityService;
+        this.visitService = visitService;
     }
 
     @Override
@@ -66,6 +66,12 @@ public class DataLoader implements CommandLineRunner {
 
         owner1.getPets().add(petMik);
         ownerService.save(owner1);
+
+        Visit visit = new Visit();
+        visit.setDate(LocalDate.now());
+        visit.setDescription("Kitty");
+        visit.setPet(petMik);
+        visitService.save(visit);
 
         Owner owner2 = new Owner();
         owner2.setFirstName("Jack");
