@@ -1,7 +1,6 @@
 package aldora.springframework.springpetclinic.controllers;
 
 import aldora.springframework.springpetclinic.services.OwnerService;
-import aldora.springframework.springpetclinic.services.map.OwnerServiceMap;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
