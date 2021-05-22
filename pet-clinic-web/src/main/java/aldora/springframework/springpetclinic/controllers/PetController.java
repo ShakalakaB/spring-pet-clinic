@@ -4,26 +4,28 @@ import aldora.springframework.springpetclinic.model.Owner;
 import aldora.springframework.springpetclinic.model.Pet;
 import aldora.springframework.springpetclinic.model.PetType;
 import aldora.springframework.springpetclinic.services.OwnerService;
+import aldora.springframework.springpetclinic.services.PetService;
 import aldora.springframework.springpetclinic.services.PetTypeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.Collection;
-import java.util.Set;
 
 @RequestMapping("/owners/{ownerId}")
 @Controller
 public class PetController {
     private final OwnerService ownerService;
     private final PetTypeService petTypeService;
+    private final PetService petService;
 
-    public PetController(OwnerService ownerService, PetTypeService petTypeService) {
+    public PetController(OwnerService ownerService, PetTypeService petTypeService, PetService petService) {
         this.ownerService = ownerService;
         this.petTypeService = petTypeService;
+        this.petService = petService;
     }
 
     @ModelAttribute("owner")
@@ -50,6 +52,10 @@ public class PetController {
 
     @PostMapping("/pets/new")
     public String processCreateForm(@ModelAttribute("owner") Owner owner, Pet pet, Model model, BindingResult bindingResult) {
+        if (StringUtils.hasLength(pet.getName()) && pet.isNew() && owner.getPet(pet.getName(), true) != null) {
+            bindingResult.rejectValue("name", "duplicate", "already exists");
+        }
+
         if (bindingResult.hasErrors()) {
             model.addAttribute("pet", pet);
             return "pets/createOrUpdatePetForm";
@@ -57,10 +63,10 @@ public class PetController {
 
         pet.setOwner(owner);
         owner.getPets().add(pet);
-        Owner savedOwner = ownerService.save(owner);
+        Pet savedPet = petService.save(pet);
 
-        model.addAttribute("pet", Pet.builder().owner(owner).build());
+        model.addAttribute("pet", savedPet);
 
-        return "redirect:/owners/" + savedOwner.getId();
+        return "redirect:/owners/" + owner.getId();
     }
 }
