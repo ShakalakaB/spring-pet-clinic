@@ -2,6 +2,7 @@ package aldora.springframework.springpetclinic.model;
 
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -14,4 +15,9 @@ import javax.persistence.Table;
 @Table(name = "pet_types")
 public class PetType extends BaseEntity {
     private String name;
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }
