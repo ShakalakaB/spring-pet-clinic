@@ -7,12 +7,14 @@ import aldora.springframework.springpetclinic.services.OwnerService;
 import aldora.springframework.springpetclinic.services.PetService;
 import aldora.springframework.springpetclinic.services.PetTypeService;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.Collection;
 
 @RequestMapping("/owners/{ownerId}")
@@ -68,5 +70,32 @@ public class PetController {
         model.addAttribute("pet", savedPet);
 
         return "redirect:/owners/" + owner.getId();
+    }
+
+    @GetMapping("/pets/{petId}/edit")
+    public String initUpdateForm(@ModelAttribute("owner") Owner owner, @PathVariable Long petId, Model model) {
+        Pet pet = petService.findById(petId);
+
+        if (pet == null) {
+            throw new RuntimeException("Pet Not Found. id: " + petId);
+        }
+
+        model.addAttribute("pet", pet);
+
+        return "pets/createOrUpdatePetForm";
+    }
+
+    @PostMapping("/pets/{petId}/edit")
+    public String processUpdateForm(@ModelAttribute Owner owner, Pet pet, Model model, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            pet.setOwner(owner);
+            model.addAttribute("pet", pet);
+            return "pets/createOrUpdatePetForm";
+        } else {
+            owner.getPets().add(pet);
+            pet.setOwner(owner);
+            petService.save(pet);
+            return "redirect:/owners/" + owner.getId();
+        }
     }
 }
