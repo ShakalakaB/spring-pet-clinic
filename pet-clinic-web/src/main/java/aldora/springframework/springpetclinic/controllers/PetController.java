@@ -92,7 +92,7 @@ public class PetController {
             model.addAttribute("pet", pet);
             return "pets/createOrUpdatePetForm";
         } else {
-            owner.getPets().add(pet);
+//            owner.getPets().add(pet);
             pet.setOwner(owner);
             petService.save(pet);
             return "redirect:/owners/" + owner.getId();
