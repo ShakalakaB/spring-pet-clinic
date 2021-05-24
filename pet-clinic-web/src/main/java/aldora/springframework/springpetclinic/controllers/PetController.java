@@ -92,7 +92,7 @@ public class PetController {
             model.addAttribute("pet", pet);
             return "pets/createOrUpdatePetForm";
         } else {
-            owner.getPets().add(pet);
+            owner.getPets().add(pet); //导致同一个ID的pet被重复加入，可以通过debug查看，同时加上session-per-request模式，导致了无法edit pet
             pet.setOwner(owner);
             petService.save(pet);
             return "redirect:/owners/" + owner.getId();
